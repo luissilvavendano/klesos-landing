@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Klesos gives outbound sales reps the next line while the call is happening, then turns weak moments into practice for the next one." />
+  <title>Klesos — Live coaching for outbound sales teams</title>
+  <style>
+    :root{
+      --ink:#0b0c0e;
+      --ink-2:#121418;
+      --paper:#f3f4f5;
+      --paper-2:#e8eaed;
+      --white:#ffffff;
+      --muted:#969ba4;
+      --muted-dark:#5f6570;
+      --line:#2b2e33;
+      --line-light:#d8dbe0;
+      --live:#ff4d3f;
+      --radius:18px;
+      --max:1180px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+      background:var(--paper);
+      color:var(--ink);
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+    .wrap{width:min(calc(100% - 40px),var(--max));margin:0 auto}
+    .eyebrow{
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:600;
+    }
+    .section{padding:110px 0}
+    .section.dark{background:var(--ink);color:var(--white)}
+    .section.soft{background:var(--paper-2)}
+    .kicker{max-width:780px;font-size:20px;line-height:1.55;color:var(--muted-dark)}
+    .dark .kicker{color:#c6c9cf}
+    h1,h2,h3,p{margin-top:0}
+    h1{
+      font-size:clamp(52px,7vw,96px);
+      line-height:.95;
+      letter-spacing:-.055em;
+      margin-bottom:28px;
+      font-weight:600;
+    }
+    h2{
+      font-size:clamp(38px,5vw,68px);
+      line-height:1;
+      letter-spacing:-.045em;
+      font-weight:600;
+      margin-bottom:24px;
+    }
+    h3{
+      font-size:24px;
+      line-height:1.15;
+      letter-spacing:-.025em;
+      margin-bottom:12px;
+    }
+    .display-small{
+      font-size:clamp(34px,4.2vw,58px);
+      line-height:1.02;
+      letter-spacing:-.045em;
+      font-weight:600;
+    }
+    .muted{color:var(--muted)}
+    .dark .muted{color:#9fa4ad}
+    .live{color:var(--live)}
+    .rule{border-top:1px solid var(--line-light)}
+    .dark .rule{border-color:var(--line)}
+    .nav{
+      position:sticky;top:0;z-index:40;
+      background:rgba(11,12,14,.92);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{
+      height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px;color:#fff;
+    }
+    .brand{display:flex;align-items:center;gap:11px;font-weight:600;letter-spacing:-.02em}
+    .brand svg{width:38px;height:20px}
+    .nav-links{display:flex;gap:28px;align-items:center;font-size:14px;color:#c7cad0}
+
+    .lang-toggle{
+      min-width:42px;height:36px;border-radius:999px;border:1px solid #3a3d43;
+      background:transparent;color:#fff;font-size:12px;font-weight:700;
+      letter-spacing:.08em;cursor:pointer;transition:.2s ease;
+    }
+    .lang-toggle:hover{border-color:#727781;background:#17191d}
+    .nav-links a:hover{color:#fff}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      min-height:48px;padding:0 20px;border-radius:999px;border:1px solid transparent;
+      font-weight:600;font-size:15px;cursor:pointer;transition:.2s ease;
+    }
+    .btn.primary{background:#fff;color:#0b0c0e}
+    .btn.primary:hover{transform:translateY(-1px);background:#e9ebee}
+    .btn.dark{background:#0b0c0e;color:#fff}
+    .btn.dark:hover{background:#1b1d21}
+    .btn.ghost{border-color:#3a3d43;color:#fff;background:transparent}
+    .btn.ghost:hover{border-color:#727781}
+    .btn.red{background:var(--live);color:#fff}
+    .hero{
+      min-height:calc(100vh - 70px);
+      display:flex;align-items:center;
+      background:var(--ink);
+      color:var(--white);
+      position:relative;overflow:hidden;
+    }
+    .hero::after{
+      content:"";position:absolute;right:-120px;top:16%;
+      width:380px;height:380px;border:1px solid #202329;border-radius:50%;
+      box-shadow:0 0 0 60px rgba(255,255,255,.008),0 0 0 120px rgba(255,255,255,.005);
+      pointer-events:none;
+    }
+    .hero-grid{
+      display:grid;grid-template-columns:1.08fr .92fr;gap:70px;align-items:center;padding:90px 0 100px;
+    }
+    .hero p{font-size:20px;line-height:1.55;color:#c5c8ce;max-width:720px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:34px 0 18px}
+    .micro{font-size:13px;color:#8f949d}
+    .live-pill{
+      display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.15em;text-transform:uppercase;
+      color:#fff;margin-bottom:28px
+    }
+    .live-dot{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 0 5px rgba(255,77,63,.1)}
+    .cockpit{
+      border:1px solid #292c31;border-radius:24px;background:#101216;
+      padding:18px;box-shadow:0 28px 70px rgba(0,0,0,.36);
+      position:relative;
+    }
+    .cockpit-top{display:flex;justify-content:space-between;align-items:center;padding:4px 2px 16px;border-bottom:1px solid #292c31}
+    .person{display:flex;align-items:center;gap:10px}
+    .avatar{width:34px;height:34px;border-radius:50%;background:#e5e7ea;color:#111;display:grid;place-items:center;font-weight:700}
+    .person strong{display:block;font-size:14px}
+    .person span{font-size:12px;color:#8e949e}
+    .timer{font-variant-numeric:tabular-nums;font-size:13px;color:#c7cad0}
+    .dialogue{padding:20px 0 4px;display:grid;gap:13px}
+    .bubble{
+      border-radius:14px;padding:13px 15px;font-size:14px;line-height:1.4;max-width:90%;
+    }
+    .bubble.you{background:#1a1d22;color:#e8eaed}
+    .bubble.them{background:#e7e9ec;color:#111;margin-left:auto}
+    .coach{
+      margin-top:8px;border:1px solid #3a3e44;border-radius:14px;padding:16px;background:#0b0c0e;
+    }
+    .coach-label{display:flex;justify-content:space-between;gap:12px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--live);margin-bottom:12px}
+    .coach-quote{font-size:18px;line-height:1.35;color:#fff}
+    .listen{margin-top:14px;font-size:12px;color:#8f949d;display:flex;align-items:center;gap:8px}
+    .wave{display:inline-flex;align-items:center;gap:2px;height:12px}
+    .wave i{display:block;width:2px;background:#fff;border-radius:4px;animation:pulse 1s infinite ease-in-out}
+    .wave i:nth-child(1){height:4px}.wave i:nth-child(2){height:10px;animation-delay:.1s}.wave i:nth-child(3){height:6px;animation-delay:.2s}.wave i:nth-child(4){height:12px;animation-delay:.3s}.wave i:nth-child(5){height:5px;animation-delay:.4s}
+    @keyframes pulse{0%,100%{opacity:.35;transform:scaleY(.65)}50%{opacity:1;transform:scaleY(1)}}
+    .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:48px}
+    .stage{
+      border:1px solid var(--line-light);border-radius:18px;padding:28px;min-height:240px;background:#f7f8f9
+    }
+    .stage.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .stage .num{font-size:12px;color:var(--muted);margin-bottom:70px}
+    .stage.active .num{color:var(--live)}
+    .stage p{color:var(--muted-dark);line-height:1.5}
+    .stage.active p{color:#aeb2ba}
+    .center-line{text-align:center;margin-top:42px}
+    .quote-big{
+      font-size:clamp(34px,5vw,72px);line-height:1.02;letter-spacing:-.045em;font-weight:600;max-width:1040px
+    }
+    .quote-card{
+      border-left:1px solid #afb4bc;padding-left:22px;color:#30343a;font-size:20px;line-height:1.5;margin:34px 0
+    }
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:44px}
+    .compare-card{border-radius:18px;padding:30px;border:1px solid var(--line-light);background:#fafbfc}
+    .compare-card.klesos{background:var(--ink);border-color:var(--ink);color:#fff}
+    .compare-label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+    .compare-card.klesos .compare-label{color:var(--live)}
+    .compare-copy{font-size:22px;line-height:1.45}
+    .compare-foot{font-size:14px;color:#858b95;margin-top:18px}
+    .proof-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start;margin-top:52px}
+    .timeline{display:grid;gap:0;border:1px solid #2f3237;border-radius:18px;overflow:hidden}
+    .timeline-row{display:grid;grid-template-columns:76px 1fr;gap:18px;padding:18px 20px;border-bottom:1px solid #292c31}
+    .timeline-row:last-child{border-bottom:none}
+    .time{font-variant-numeric:tabular-nums;color:#7f858e}
+    .timeline-row strong{font-size:15px}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:48px}
+    .step{border-top:1px solid var(--line-light);padding-top:24px}
+    .step-no{font-size:12px;letter-spacing:.14em;color:var(--muted);margin-bottom:46px}
+    .step p{color:var(--muted-dark);line-height:1.5}
+    .loop{
+      display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:50px
+    }
+    .loop-item{border:1px solid #2c2f34;border-radius:14px;padding:18px;min-height:116px;display:flex;flex-direction:column;justify-content:space-between}
+    .loop-item span:first-child{font-size:11px;color:var(--live);letter-spacing:.12em}
+    .loop-item strong{font-size:15px}
+    .manager-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+    .dashboard{border:1px solid var(--line-light);background:#fff;border-radius:18px;overflow:hidden}
+    .dash-head{padding:18px 20px;border-bottom:1px solid var(--line-light);display:flex;justify-content:space-between}
+    .dash-row{display:grid;grid-template-columns:1.2fr .7fr 1fr;padding:15px 20px;border-bottom:1px solid #eceef1;font-size:14px}
+    .dash-row:last-child{border-bottom:none}
+    .tag{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:5px 9px;font-size:11px;background:#eceef1}
+    .tag.dark{background:#15171a;color:#fff}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+    .feature{border:1px solid var(--line-light);border-radius:16px;padding:24px;background:#f8f9fa}
+    .feature p{color:var(--muted-dark);line-height:1.5;margin-bottom:0}
+    .anti-grid{display:grid;grid-template-columns:1fr .7fr;gap:70px;align-items:end}
+    .anti-note{border-left:1px solid #3a3d42;padding-left:24px;color:#a7abb3;font-size:18px;line-height:1.55}
+    .offer{
+      background:#fff;border:1px solid var(--line-light);border-radius:24px;padding:46px;
+      display:grid;grid-template-columns:1fr .95fr;gap:50px;align-items:center
+    }
+    .offer-flow{display:grid;gap:0}
+    .offer-step{padding:18px 0;border-bottom:1px solid var(--line-light);display:flex;gap:16px;align-items:flex-start}
+    .offer-step:last-child{border-bottom:none}
+    .offer-step b{min-width:28px}
+    .price-strip{margin-top:24px;padding:18px 20px;border:1px solid var(--line-light);border-radius:14px;background:#f8f9fa;color:#4b5058;font-size:14px}
+    .faq{max-width:900px;margin-top:42px}
+    .faq-item{border-top:1px solid var(--line-light)}
+    .faq-btn{width:100%;padding:24px 0;display:flex;justify-content:space-between;align-items:center;background:none;border:0;text-align:left;font-size:18px;font-weight:600;cursor:pointer}
+    .faq-btn span:last-child{font-size:24px;font-weight:400;transition:.2s}
+    .faq-panel{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--muted-dark);line-height:1.6}
+    .faq-panel p{padding:0 0 24px;margin:0}
+    .faq-item.open .faq-btn span:last-child{transform:rotate(45deg)}
+    .final{padding:130px 0}
+    .final h2{max-width:1050px}
+    footer{background:var(--ink);color:#fff;border-top:1px solid #26292e;padding:34px 0 44px}
+    .footer-row{display:flex;justify-content:space-between;gap:30px;align-items:center;color:#9297a0;font-size:13px}
+    .footer-row .brand{color:#fff}
+    .fade{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+    .fade.in{opacity:1;transform:none}
+    .mobile-cta{display:none}
+    @media (max-width:980px){
+      .hero-grid,.proof-grid,.manager-grid,.anti-grid,.offer{grid-template-columns:1fr}
+      .hero-grid{gap:44px;padding-top:72px}
+      .steps{grid-template-columns:1fr 1fr}
+      .loop{grid-template-columns:repeat(3,1fr)}
+      .features{grid-template-columns:1fr 1fr}
+      .nav-links{display:none}
+    }
+    @media (max-width:680px){
+      .wrap{width:min(calc(100% - 28px),var(--max))}
+      .section{padding:78px 0}
+      .three-col,.compare,.steps,.features{grid-template-columns:1fr}
+      .loop{grid-template-columns:1fr 1fr}
+      .stage .num{margin-bottom:30px}
+      .offer{padding:28px}
+      .footer-row{align-items:flex-start;flex-direction:column}
+      .nav .btn{display:none}
+      .mobile-cta{
+        display:flex;position:fixed;z-index:50;bottom:14px;left:14px;right:14px;
+        background:#fff;color:#111;min-height:54px;border-radius:999px;align-items:center;justify-content:center;
+        font-weight:700;box-shadow:0 15px 40px rgba(0,0,0,.28)
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="Klesos home">
+        <svg viewBox="0 0 76 28" fill="none" aria-hidden="true">
+          <circle cx="12" cy="14" r="8" stroke="white" stroke-width="5"/>
+          <path d="M20 14H46" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M48 14h3m2-6v12m3-9v6m3-11v16m3-13v10m3-7v4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Klesos</span>
+      </a>
+      <div class="nav-links">
+        <a href="#why">Why Klesos</a>
+        <a href="#how">How it works</a>
+        <a href="#teams">For teams</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px"><button class="lang-toggle" id="langToggle" aria-label="Cambiar idioma">ES</button><a class="btn primary" href="#offer">Try Klesos on 3 calls →</a></div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="fade">
+          <div class="live-pill"><span class="live-dot"></span> Live coaching for outbound sales teams</div>
+          <h1>Your rep has seconds to answer an objection.</h1>
+          <p>Klesos puts a useful next line on screen while the call is happening, then turns weak moments into practice for the next one.</p>
+          <p><strong style="color:white">The AI never speaks to the prospect.</strong> Your rep does all the talking.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#offer">Try Klesos on 3 calls →</a>
+            <a class="btn ghost" href="#proof">▶ Watch how it works</a>
+          </div>
+          <div class="micro">Guided setup · Practise before you dial · Test it on real objections</div>
+        </div>
+
+        <div class="cockpit fade">
+          <div class="cockpit-top">
+            <div class="person">
+              <div class="avatar">D</div>
+              <div><strong>Dana Whitfield</strong><span>Owner · Roofing · live call</span></div>
+            </div>
+            <div class="timer"><span class="live">● LIVE</span>&nbsp;&nbsp;00:32</div>
+          </div>
+          <div class="dialogue">
+            <div class="bubble you"><b>You</b><br/>I’m calling because I noticed your site is losing mobile traffic.</div>
+            <div class="bubble them"><b>Dana</b><br/>Honestly, we already work with someone.</div>
+            <div class="coach">
+              <div class="coach-label"><span>Coach · objection detected</span><span>next line</span></div>
+              <div class="coach-quote">“Totally fair. What would have to change for you to even consider reviewing another option?”</div>
+              <div class="listen"><span class="wave"><i></i><i></i><i></i><i></i><i></i></span> listening · the prospect hears only you</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="wrap">
+        <div class="eyebrow fade">The gap no dashboard fixes</div>
+        <h2 class="fade">Knowing what to say after the call does not change the call.</h2>
+        <div class="three-col">
+          <article class="stage fade">
+            <div class="num">01 · BEFORE</div>
+            <h3>Data. CRM. Research. Scripts.</h3>
+            <p>There are hundreds of tools to prepare the conversation.</p>
+          </article>
+          <article class="stage active fade">
+            <div class="num">02 · DURING</div>
+            <h3>The prospect pushes back.</h3>
+            <p>Your rep has seconds to answer. This is where the outcome changes.</p>
+          </article>
+          <article class="stage fade">
+            <div class="num">03 · AFTER</div>
+            <h3>Recording. Transcript. Scorecard.</h3>
+            <p>Now everyone knows what should have happened.</p>
+          </article>
+        </div>
+        <div class="center-line fade"><div class="display-small">Klesos is built for the middle column.</div></div>
+      </div>
+    </section>
+
+    <section class="section soft">
+      <div class="wrap">
+        <div class="eyebrow fade">The real problem</div>
+        <div class="quote-big fade">Your reps do not need another folder full of scripts. They need the right sentence while they can still use it.</div>
+        <div class="quote-card fade">“We already work with someone else.”</div>
+        <p class="kicker fade">Your rep knows there is a good answer. Maybe they have read it. Maybe they have even practised it. But now someone is waiting on the phone, so they improvise, over-explain, change the subject, or remember the perfect answer twenty minutes later.</p>
+        <div class="display-small fade" style="margin-top:44px">That is not only a training problem.<br/><span class="live">It is a timing problem.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="eyebrow fade">The unique mechanism</div>
+        <h2 class="fade">Klesos does not tell your rep what they should do.<br/>It gives them words they can say.</h2>
+        <div class="compare">
+          <div class="compare-card fade">
+            <div class="compare-label">What other tools show</div>
+            <div class="compare-copy">“Handle the price objection. Reframe around value and ask a discovery question.”</div>
+            <div class="compare-foot">Advice. The rep still has to translate it mid-sentence.</div>
+          </div>
+          <div class="compare-card klesos fade">
+            <div class="compare-label">What Klesos shows</div>
+            <div class="compare-copy">“That makes sense. What would have to change for you to even consider an alternative?”</div>
+            <div class="compare-foot">A line. The rep can use it, adapt it, or keep talking in their own words.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark" id="proof">
+      <div class="wrap">
+        <div class="eyebrow fade">Show the mechanism. Do not over-explain it.</div>
+        <h2 class="fade">Watch a real objection happen.</h2>
+        <p class="kicker fade">The strongest proof is simple: the prospect objects, the coach understands the moment, a useful line appears, and the rep decides how to use it.</p>
+        <div class="proof-grid">
+          <div class="fade">
+            <div class="display-small">It listens.<br/>It writes.<br/><span class="live">It never speaks.</span></div>
+            <p class="kicker" style="margin-top:26px">The prospect only hears your salesperson. Klesos stays on the screen, where it belongs.</p>
+          </div>
+          <div class="timeline fade">
+            <div class="timeline-row"><div class="time">00:00</div><strong>Call begins</strong></div>
+            <div class="timeline-row"><div class="time">00:18</div><strong>Prospect pushes back</strong></div>
+            <div class="timeline-row"><div class="time">00:19</div><strong>Klesos identifies the objection</strong></div>
+            <div class="timeline-row"><div class="time">00:20</div><strong>A sayable response appears on screen</strong></div>
+            <div class="timeline-row"><div class="time">00:21</div><strong>The rep chooses how to use it</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="eyebrow fade">How it works</div>
+        <h2 class="fade">From your business to a coached call.</h2>
+        <p class="kicker fade">No long implementation story. Start with the way your team already sells, test one objection, then put the coach on real calls.</p>
+        <div class="steps">
+          <article class="step fade">
+            <div class="step-no">01</div>
+            <h3>Tell Klesos what you sell.</h3>
+            <p>Your product, buyer, pitch, and the objections your team hears most.</p>
+          </article>
+          <article class="step fade">
+            <div class="step-no">02</div>
+            <h3>Prepare the call.</h3>
+            <p>Lead context, opener, script, objection handling, and the relevant knowledge are ready before you dial.</p>
+          </article>
+          <article class="step fade">
+            <div class="step-no">03</div>
+            <h3>Your rep makes the call.</h3>
+            <p>Klesos listens in the background and surfaces a useful next line when the conversation turns.</p>
+          </article>
+          <article class="step fade">
+            <div class="step-no">04</div>
+            <h3>The call teaches the next one.</h3>
+            <p>Weak moments become practice. Approved learning can feed back into the team’s shared knowledge.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft">
+      <div class="wrap">
+        <div class="eyebrow fade">Objection engine</div>
+        <h2 class="fade">Your team should not reinvent the same answers every Monday.</h2>
+        <p class="kicker fade">Recurring objections can be prepared before the call. Answers about product, pricing, or terms can come from your own knowledge. New situations can become reusable learning.</p>
+        <div class="cockpit fade" style="max-width:860px;margin-top:44px">
+          <div class="dialogue">
+            <div class="bubble them"><b>Prospect</b><br/>We’re happy with our current provider.</div>
+            <div class="coach">
+              <div class="coach-label"><span>Klesos · objection detected</span><span>suggested line</span></div>
+              <div class="coach-quote">“Totally fair. I’m not asking you to change today. What would have to happen for you to ever review another option?”</div>
+            </div>
+            <div class="bubble you"><b>Rep</b><br/>Uses it, adapts it, or keeps the conversation in their own words.</div>
+          </div>
+        </div>
+        <div class="display-small fade" style="margin-top:34px">Human in control. Always.</div>
+      </div>
+    </section>
+
+    <section class="section dark">
+      <div class="wrap">
+        <div class="eyebrow fade">The compounding loop</div>
+        <h2 class="fade">One bad call should cost you one call.<br/><span class="live">Not the next fifty.</span></h2>
+        <p class="kicker fade">The goal is not to analyse more calls. It is to make the same mistake fewer times.</p>
+        <div class="loop">
+          <div class="loop-item fade"><span>01</span><strong>Call</strong></div>
+          <div class="loop-item fade"><span>02</span><strong>Analyse</strong></div>
+          <div class="loop-item fade"><span>03</span><strong>Isolate</strong></div>
+          <div class="loop-item fade"><span>04</span><strong>Drill</strong></div>
+          <div class="loop-item fade"><span>05</span><strong>Practise</strong></div>
+          <div class="loop-item fade"><span>06</span><strong>Improve</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="teams">
+      <div class="wrap manager-grid">
+        <div class="fade">
+          <div class="eyebrow">For managers</div>
+          <h2>Coaching for the whole team. Without listening to every call.</h2>
+          <p class="kicker">If you manage 5, 10, or 15 reps, you cannot sit inside every conversation. Klesos helps surface which calls deserve review, where objections break the pitch, and what lessons are worth sharing.</p>
+          <div class="display-small" style="margin-top:38px">Manage the coaching system.<br/>Not every second of every call.</div>
+        </div>
+        <div class="dashboard fade">
+          <div class="dash-head"><strong>Team coaching</strong><span class="muted">Today</span></div>
+          <div class="dash-row"><strong>Maya</strong><span>Objections</span><span><i class="tag dark">Review</i></span></div>
+          <div class="dash-row"><strong>Jon</strong><span>Opening</span><span><i class="tag">Stable</i></span></div>
+          <div class="dash-row"><strong>Rina</strong><span>Close</span><span><i class="tag dark">Drill ready</i></span></div>
+          <div class="dash-row"><strong>Sam</strong><span>Discovery</span><span><i class="tag">Stable</i></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft">
+      <div class="wrap">
+        <div class="eyebrow fade">Everything around the call is there too</div>
+        <h2 class="fade">One system around the moment that matters.</h2>
+        <div class="features">
+          <div class="feature fade"><h3>Prospecting & prep</h3><p>ICP definition, lead sourcing, enrichment, scoring, market signals, and lead preparation.</p></div>
+          <div class="feature fade"><h3>Scripts & knowledge</h3><p>Playbooks, objection handling, product knowledge, and reusable sales context.</p></div>
+          <div class="feature fade"><h3>Calling</h3><p>Dialer, numbers, recording, transcription, outcome tagging, and summaries.</p></div>
+          <div class="feature fade"><h3>Live coaching</h3><p>Next-line coaching, objection handling, and live conversation nudges.</p></div>
+          <div class="feature fade"><h3>Practice</h3><p>AI prospects, drills, and practice based on real call moments.</p></div>
+          <div class="feature fade"><h3>Management</h3><p>Goals, reporting, roles, assignments, and control of shared learning.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark">
+      <div class="wrap anti-grid">
+        <div class="fade">
+          <div class="eyebrow">A hard product rule</div>
+          <h2>One thing Klesos will never do.</h2>
+          <div class="display-small"><span class="live">Speak to your prospect for you.</span></div>
+        </div>
+        <div class="anti-note fade">
+          Your voice matters. Your judgement matters. That is why Klesos listens and writes. You decide what to say. The prospect is always speaking with a person.
+          <br/><br/><strong style="color:white">You get the words. You keep the relationship.</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="offer">
+      <div class="wrap">
+        <div class="offer fade">
+          <div>
+            <div class="eyebrow">Low-friction offer</div>
+            <h2 style="font-size:clamp(42px,5vw,64px)">Test Klesos on an objection your team already hears.</h2>
+            <p class="kicker">No generic demo. Use your pitch, your objections, and your reps.</p>
+            <div class="hero-actions">
+              <a class="btn dark" href="https://klesos.com/" target="_blank" rel="noopener">Start with 3 coached calls →</a>
+              <a class="btn" style="border-color:#c8cbd1" href="https://klesos.com/pricing" target="_blank" rel="noopener">See pricing</a>
+            </div>
+            <div class="price-strip">Plans currently start from €39/month. Team pricing scales with seats and usage.</div>
+          </div>
+          <div class="offer-flow">
+            <div class="offer-step"><b>01</b><div><strong>Guided setup</strong><br/><span class="muted">Bring in your pitch and the way your team sells.</span></div></div>
+            <div class="offer-step"><b>02</b><div><strong>Simulation</strong><br/><span class="muted">Test one real objection before risking a live opportunity.</span></div></div>
+            <div class="offer-step"><b>03</b><div><strong>Real calls</strong><br/><span class="muted">See whether the coaching appears when the rep actually needs it.</span></div></div>
+            <div class="offer-step"><b>04</b><div><strong>Review</strong><br/><span class="muted">Decide using your own conversations, not a polished demo.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section soft" id="faq">
+      <div class="wrap">
+        <div class="eyebrow fade">Objections before the CTA</div>
+        <h2 class="fade">Questions sales teams usually ask.</h2>
+        <div class="faq fade">
+          <div class="faq-item">
+            <button class="faq-btn"><span>Does the AI speak to my prospects?</span><span>+</span></button>
+            <div class="faq-panel"><p>No. Klesos listens to the conversation and shows coaching to the rep. The person speaking to the prospect is your salesperson.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn"><span>Do I have to replace my current sales process?</span><span>+</span></button>
+            <div class="faq-panel"><p>No. Start with your existing pitch, a real objection, and real calls. You can evaluate the core value before making larger process changes.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn"><span>What happens when the prospect goes off script?</span><span>+</span></button>
+            <div class="faq-panel"><p>Klesos follows the live conversation and uses the available context to surface relevant coaching. The rep remains in control of what actually gets said.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn"><span>Does this replace the sales manager?</span><span>+</span></button>
+            <div class="faq-panel"><p>No. Klesos helps surface coachable moments and prepare practice. The manager still decides what the team should learn and what becomes shared knowledge.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-btn"><span>Can reps practise before calling?</span><span>+</span></button>
+            <div class="faq-panel"><p>Yes. Reps can practise against an AI prospect before using a live opportunity as the practice environment.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section dark final">
+      <div class="wrap">
+        <div class="eyebrow fade">The close</div>
+        <h2 class="fade">Friday’s feedback cannot save Tuesday’s call.</h2>
+        <div class="display-small fade">Klesos can be there while the call is still happening.</div>
+        <p class="kicker fade" style="margin-top:30px">When the next objection appears, your rep does not have to search a document, remember a training session, or improvise from scratch. The next line can already be in front of them.</p>
+        <div class="hero-actions fade">
+          <a class="btn primary" href="https://klesos.com/" target="_blank" rel="noopener">Try Klesos on 3 calls →</a>
+          <a class="btn ghost" href="#proof">See the mechanism</a>
+        </div>
+        <div class="display-small fade" style="margin-top:70px">What to say now.<br/><span class="live">What to practise next.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row">
+      <div class="brand">
+        <svg viewBox="0 0 76 28" fill="none" aria-hidden="true" style="width:34px">
+          <circle cx="12" cy="14" r="8" stroke="white" stroke-width="5"/>
+          <path d="M20 14H46" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <path d="M48 14h3m2-6v12m3-9v6m3-11v16m3-13v10m3-7v4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Klesos</span>
+      </div>
+      <div>The AI listens. Your rep talks. The team learns.</div>
+    </div>
+  </footer>
+
+  <a class="mobile-cta" href="#offer">Try Klesos on 3 calls →</a>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('in');
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('.faq-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const panel = item.querySelector('.faq-panel');
+        const open = item.classList.toggle('open');
+        panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0px';
+      });
+    });
+
+    const translations = {
+      "Why Klesos":"Por qué Klesos",
+      "How it works":"Cómo funciona",
+      "For teams":"Para equipos",
+      "FAQ":"Preguntas",
+      "Try Klesos on 3 calls →":"Probar Klesos en 3 llamadas →",
+      "Live coaching for outbound sales teams":"Coaching en vivo para equipos de ventas outbound",
+      "Your rep has seconds to answer an objection.":"Tu vendedor tiene segundos para responder una objeción.",
+      "Klesos puts a useful next line on screen while the call is happening, then turns weak moments into practice for the next one.":"Klesos muestra una frase útil en pantalla mientras la llamada está ocurriendo y convierte los momentos débiles en práctica para la siguiente.",
+      "The AI never speaks to the prospect.":"La IA nunca habla con el prospecto.",
+      "Your rep does all the talking.":"Tu vendedor es quien habla.",
+      "▶ Watch how it works":"▶ Ver cómo funciona",
+      "Guided setup · Practise before you dial · Test it on real objections":"Configuración guiada · Practica antes de llamar · Pruébalo con objeciones reales",
+      "Owner · Roofing · live call":"Propietaria · Roofing · llamada en vivo",
+      "You":"Tú",
+      "I’m calling because I noticed your site is losing mobile traffic.":"Te llamo porque noté que tu web está perdiendo tráfico móvil.",
+      "Dana":"Dana",
+      "Honestly, we already work with someone.":"La verdad, ya trabajamos con alguien.",
+      "Coach · objection detected":"Coach · objeción detectada",
+      "next line":"siguiente frase",
+      "“Totally fair. What would have to change for you to even consider reviewing another option?”":"“Totalmente válido. ¿Qué tendría que cambiar para que siquiera consideraras revisar otra opción?”",
+      "listening · the prospect hears only you":"escuchando · el prospecto solo te escucha a ti",
+      "The gap no dashboard fixes":"El vacío que ningún dashboard resuelve",
+      "Knowing what to say after the call does not change the call.":"Saber qué decir después de la llamada no cambia la llamada.",
+      "01 · BEFORE":"01 · ANTES",
+      "Data. CRM. Research. Scripts.":"Datos. CRM. Investigación. Guiones.",
+      "There are hundreds of tools to prepare the conversation.":"Hay cientos de herramientas para preparar la conversación.",
+      "02 · DURING":"02 · DURANTE",
+      "The prospect pushes back.":"El prospecto pone una objeción.",
+      "Your rep has seconds to answer. This is where the outcome changes.":"Tu vendedor tiene segundos para responder. Aquí es donde cambia el resultado.",
+      "03 · AFTER":"03 · DESPUÉS",
+      "Recording. Transcript. Scorecard.":"Grabación. Transcripción. Evaluación.",
+      "Now everyone knows what should have happened.":"Ahora todos saben lo que debería haber pasado.",
+      "Klesos is built for the middle column.":"Klesos está construido para la columna del medio.",
+      "The real problem":"El problema real",
+      "Your reps do not need another folder full of scripts. They need the right sentence while they can still use it.":"Tus vendedores no necesitan otra carpeta llena de guiones. Necesitan la frase correcta mientras todavía pueden usarla.",
+      "“We already work with someone else.”":"“Ya trabajamos con otra persona.”",
+      "Your rep knows there is a good answer. Maybe they have read it. Maybe they have even practised it. But now someone is waiting on the phone, so they improvise, over-explain, change the subject, or remember the perfect answer twenty minutes later.":"Tu vendedor sabe que existe una buena respuesta. Quizás la leyó. Quizás incluso la practicó. Pero ahora hay alguien esperando al teléfono, así que improvisa, habla de más, cambia de tema o recuerda la respuesta perfecta veinte minutos después.",
+      "That is not only a training problem.":"Eso no es solo un problema de entrenamiento.",
+      "It is a timing problem.":"Es un problema de timing.",
+      "The unique mechanism":"El mecanismo único",
+      "Klesos does not tell your rep what they should do.":"Klesos no le dice a tu vendedor lo que debería hacer.",
+      "It gives them words they can say.":"Le da palabras que puede decir.",
+      "What other tools show":"Lo que muestran otras herramientas",
+      "“Handle the price objection. Reframe around value and ask a discovery question.”":"“Maneja la objeción de precio. Reencuadra hacia el valor y haz una pregunta de descubrimiento.”",
+      "Advice. The rep still has to translate it mid-sentence.":"Consejo. El vendedor todavía tiene que traducirlo en una frase mientras habla.",
+      "What Klesos shows":"Lo que muestra Klesos",
+      "“That makes sense. What would have to change for you to even consider an alternative?”":"“Tiene sentido. ¿Qué tendría que cambiar para que siquiera consideraras una alternativa?”",
+      "A line. The rep can use it, adapt it, or keep talking in their own words.":"Una frase. El vendedor puede usarla, adaptarla o seguir hablando con sus propias palabras.",
+      "Show the mechanism. Do not over-explain it.":"Muestra el mecanismo. No lo sobreexplique.",
+      "Watch a real objection happen.":"Mira una objeción real.",
+      "The strongest proof is simple: the prospect objects, the coach understands the moment, a useful line appears, and the rep decides how to use it.":"La prueba más fuerte es simple: el prospecto objeta, el coach entiende el momento, aparece una frase útil y el vendedor decide cómo usarla.",
+      "It listens.":"Escucha.",
+      "It writes.":"Escribe.",
+      "It never speaks.":"Nunca habla.",
+      "The prospect only hears your salesperson. Klesos stays on the screen, where it belongs.":"El prospecto solo escucha a tu vendedor. Klesos se queda en la pantalla, donde debe estar.",
+      "Call begins":"Comienza la llamada",
+      "Prospect pushes back":"El prospecto pone una objeción",
+      "Klesos identifies the objection":"Klesos identifica la objeción",
+      "A sayable response appears on screen":"Aparece una respuesta que el vendedor puede decir",
+      "The rep chooses how to use it":"El vendedor decide cómo usarla",
+      "From your business to a coached call.":"De tu negocio a una llamada con coaching.",
+      "No long implementation story. Start with the way your team already sells, test one objection, then put the coach on real calls.":"Sin una implementación eterna. Empieza con la forma en que tu equipo ya vende, prueba una objeción y luego lleva el coach a llamadas reales.",
+      "Tell Klesos what you sell.":"Dile a Klesos qué vendes.",
+      "Your product, buyer, pitch, and the objections your team hears most.":"Tu producto, comprador, pitch y las objeciones que más escucha tu equipo.",
+      "Prepare the call.":"Prepara la llamada.",
+      "Lead context, opener, script, objection handling, and the relevant knowledge are ready before you dial.":"Contexto del lead, apertura, guion, manejo de objeciones y conocimiento relevante listos antes de llamar.",
+      "Your rep makes the call.":"Tu vendedor hace la llamada.",
+      "Klesos listens in the background and surfaces a useful next line when the conversation turns.":"Klesos escucha en segundo plano y muestra una frase útil cuando la conversación cambia.",
+      "The call teaches the next one.":"La llamada enseña a la siguiente.",
+      "Weak moments become practice. Approved learning can feed back into the team’s shared knowledge.":"Los momentos débiles se convierten en práctica. El aprendizaje aprobado puede volver al conocimiento compartido del equipo.",
+      "Objection engine":"Motor de objeciones",
+      "Your team should not reinvent the same answers every Monday.":"Tu equipo no debería reinventar las mismas respuestas cada lunes.",
+      "Recurring objections can be prepared before the call. Answers about product, pricing, or terms can come from your own knowledge. New situations can become reusable learning.":"Las objeciones recurrentes pueden prepararse antes de la llamada. Las respuestas sobre producto, precio o condiciones pueden salir de tu propio conocimiento. Las situaciones nuevas pueden convertirse en aprendizaje reutilizable.",
+      "Prospect":"Prospecto",
+      "We’re happy with our current provider.":"Estamos contentos con nuestro proveedor actual.",
+      "Klesos · objection detected":"Klesos · objeción detectada",
+      "suggested line":"frase sugerida",
+      "“Totally fair. I’m not asking you to change today. What would have to happen for you to ever review another option?”":"“Totalmente válido. No te estoy pidiendo que cambies hoy. ¿Qué tendría que pasar para que alguna vez revisaras otra opción?”",
+      "Rep":"Vendedor",
+      "Uses it, adapts it, or keeps the conversation in their own words.":"La usa, la adapta o sigue la conversación con sus propias palabras.",
+      "Human in control. Always.":"Humano al mando. Siempre.",
+      "The compounding loop":"El ciclo de mejora",
+      "One bad call should cost you one call.":"Una mala llamada debería costarte una llamada.",
+      "Not the next fifty.":"No las siguientes cincuenta.",
+      "The goal is not to analyse more calls. It is to make the same mistake fewer times.":"El objetivo no es analizar más llamadas. Es cometer menos veces el mismo error.",
+      "Call":"Llamada",
+      "Analyse":"Analizar",
+      "Isolate":"Aislar",
+      "Drill":"Practicar",
+      "Practise":"Entrenar",
+      "Improve":"Mejorar",
+      "For managers":"Para managers",
+      "Coaching for the whole team. Without listening to every call.":"Coaching para todo el equipo. Sin escuchar todas las llamadas.",
+      "If you manage 5, 10, or 15 reps, you cannot sit inside every conversation. Klesos helps surface which calls deserve review, where objections break the pitch, and what lessons are worth sharing.":"Si gestionas 5, 10 o 15 vendedores, no puedes estar dentro de cada conversación. Klesos ayuda a detectar qué llamadas merecen revisión, dónde las objeciones rompen el pitch y qué aprendizajes vale la pena compartir.",
+      "Manage the coaching system.":"Gestiona el sistema de coaching.",
+      "Not every second of every call.":"No cada segundo de cada llamada.",
+      "Team coaching":"Coaching del equipo",
+      "Today":"Hoy",
+      "Objections":"Objeciones",
+      "Review":"Revisar",
+      "Opening":"Apertura",
+      "Stable":"Estable",
+      "Close":"Cierre",
+      "Drill ready":"Práctica lista",
+      "Discovery":"Discovery",
+      "Everything around the call is there too":"Todo alrededor de la llamada también está ahí",
+      "One system around the moment that matters.":"Un sistema alrededor del momento que importa.",
+      "Prospecting & prep":"Prospección y preparación",
+      "ICP definition, lead sourcing, enrichment, scoring, market signals, and lead preparation.":"Definición de ICP, sourcing de leads, enriquecimiento, scoring, señales de mercado y preparación de leads.",
+      "Scripts & knowledge":"Guiones y conocimiento",
+      "Playbooks, objection handling, product knowledge, and reusable sales context.":"Playbooks, manejo de objeciones, conocimiento de producto y contexto comercial reutilizable.",
+      "Calling":"Llamadas",
+      "Dialer, numbers, recording, transcription, outcome tagging, and summaries.":"Dialer, números, grabación, transcripción, etiquetado de resultados y resúmenes.",
+      "Live coaching":"Coaching en vivo",
+      "Next-line coaching, objection handling, and live conversation nudges.":"Siguiente frase, manejo de objeciones y señales durante la conversación.",
+      "Practice":"Práctica",
+      "AI prospects, drills, and practice based on real call moments.":"Prospectos de IA, ejercicios y práctica basada en momentos reales de llamadas.",
+      "Management":"Gestión",
+      "Goals, reporting, roles, assignments, and control of shared learning.":"Objetivos, reporting, roles, asignaciones y control del aprendizaje compartido.",
+      "A hard product rule":"Una regla innegociable del producto",
+      "One thing Klesos will never do.":"Una cosa que Klesos nunca hará.",
+      "Speak to your prospect for you.":"Hablar con tu prospecto por ti.",
+      "Your voice matters. Your judgement matters. That is why Klesos listens and writes. You decide what to say. The prospect is always speaking with a person.":"Tu voz importa. Tu criterio importa. Por eso Klesos escucha y escribe. Tú decides qué decir. El prospecto siempre está hablando con una persona.",
+      "You get the words. You keep the relationship.":"Tú recibes las palabras. Tú mantienes la relación.",
+      "Low-friction offer":"Oferta de baja fricción",
+      "Test Klesos on an objection your team already hears.":"Prueba Klesos con una objeción que tu equipo ya escucha.",
+      "No generic demo. Use your pitch, your objections, and your reps.":"Sin demo genérica. Usa tu pitch, tus objeciones y tus vendedores.",
+      "Start with 3 coached calls →":"Empieza con 3 llamadas con coaching →",
+      "See pricing":"Ver precios",
+      "Plans currently start from €39/month. Team pricing scales with seats and usage.":"Los planes actualmente empiezan desde €39/mes. El precio para equipos escala según asientos y uso.",
+      "Guided setup":"Configuración guiada",
+      "Bring in your pitch and the way your team sells.":"Trae tu pitch y la forma en que vende tu equipo.",
+      "Simulation":"Simulación",
+      "Test one real objection before risking a live opportunity.":"Prueba una objeción real antes de arriesgar una oportunidad en vivo.",
+      "Real calls":"Llamadas reales",
+      "See whether the coaching appears when the rep actually needs it.":"Comprueba si el coaching aparece cuando el vendedor realmente lo necesita.",
+      "Decide using your own conversations, not a polished demo.":"Decide usando tus propias conversaciones, no una demo pulida.",
+      "Objections before the CTA":"Objeciones antes del CTA",
+      "Questions sales teams usually ask.":"Preguntas que los equipos comerciales suelen hacer.",
+      "Does the AI speak to my prospects?":"¿La IA habla con mis prospectos?",
+      "No. Klesos listens to the conversation and shows coaching to the rep. The person speaking to the prospect is your salesperson.":"No. Klesos escucha la conversación y muestra coaching al vendedor. La persona que habla con el prospecto es tu vendedor.",
+      "Do I have to replace my current sales process?":"¿Tengo que reemplazar mi proceso comercial actual?",
+      "No. Start with your existing pitch, a real objection, and real calls. You can evaluate the core value before making larger process changes.":"No. Empieza con tu pitch actual, una objeción real y llamadas reales. Puedes evaluar el valor principal antes de hacer cambios mayores en tu proceso.",
+      "What happens when the prospect goes off script?":"¿Qué pasa cuando el prospecto se sale del guion?",
+      "Klesos follows the live conversation and uses the available context to surface relevant coaching. The rep remains in control of what actually gets said.":"Klesos sigue la conversación en vivo y utiliza el contexto disponible para mostrar coaching relevante. El vendedor mantiene el control sobre lo que realmente se dice.",
+      "Does this replace the sales manager?":"¿Esto reemplaza al sales manager?",
+      "No. Klesos helps surface coachable moments and prepare practice. The manager still decides what the team should learn and what becomes shared knowledge.":"No. Klesos ayuda a detectar momentos entrenables y preparar práctica. El manager sigue decidiendo qué debe aprender el equipo y qué se convierte en conocimiento compartido.",
+      "Can reps practise before calling?":"¿Los vendedores pueden practicar antes de llamar?",
+      "Yes. Reps can practise against an AI prospect before using a live opportunity as the practice environment.":"Sí. Los vendedores pueden practicar contra un prospecto de IA antes de usar una oportunidad real como entorno de práctica.",
+      "The close":"El cierre",
+      "Friday’s feedback cannot save Tuesday’s call.":"El feedback del viernes no puede salvar la llamada del martes.",
+      "Klesos can be there while the call is still happening.":"Klesos puede estar ahí mientras la llamada todavía está ocurriendo.",
+      "When the next objection appears, your rep does not have to search a document, remember a training session, or improvise from scratch. The next line can already be in front of them.":"Cuando aparezca la siguiente objeción, tu vendedor no tiene que buscar un documento, recordar una sesión de entrenamiento o improvisar desde cero. La siguiente frase puede estar ya frente a él.",
+      "See the mechanism":"Ver el mecanismo",
+      "What to say now.":"Qué decir ahora.",
+      "What to practise next.":"Qué practicar después.",
+      "The AI listens. Your rep talks. The team learns.":"La IA escucha. Tu vendedor habla. El equipo aprende."
+    };
+
+    const textNodes = [];
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent || ['SCRIPT','STYLE','NOSCRIPT'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+        if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      node.datasetOriginal = node.nodeValue;
+      textNodes.push(node);
+    }
+
+    let currentLang = 'en';
+    const langBtn = document.getElementById('langToggle');
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      textNodes.forEach(node => {
+        const original = node.datasetOriginal || node.nodeValue;
+        const trimmed = original.trim();
+        const leading = original.match(/^\s*/)[0];
+        const trailing = original.match(/\s*$/)[0];
+        node.nodeValue = lang === 'es' && translations[trimmed]
+          ? leading + translations[trimmed] + trailing
+          : original;
+      });
+      langBtn.textContent = lang === 'en' ? 'ES' : 'EN';
+      langBtn.setAttribute('aria-label', lang === 'en' ? 'Cambiar a español' : 'Switch to English');
+      try { localStorage.setItem('klesos-lang', lang); } catch (e) {}
+    }
+
+    langBtn.addEventListener('click', () => setLanguage(currentLang === 'en' ? 'es' : 'en'));
+    let savedLang = null;
+    try { savedLang = localStorage.getItem('klesos-lang'); } catch (e) {}
+    if (savedLang === 'es') setLanguage('es');
+
+  </script>
+</body>
+</html>
